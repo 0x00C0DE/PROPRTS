@@ -48,7 +48,7 @@ Shares2Sell = 0.00
 Shares2Buy = 0.00
 
 # step (5)
-# number of shares based on (total cost / Shares2Buy)
+# number of shares based on (total cost / float(20))
 # EX: ($2940 / 20) = 147
 num_shares = 147
 

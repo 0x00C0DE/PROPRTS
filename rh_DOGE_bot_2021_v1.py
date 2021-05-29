@@ -133,6 +133,7 @@ def run(sc):
                 tempval = average_cost*num_shares
                 average_cost = tempval
                 average_cost += float(r)
+                # will have to update num_shares below accordingly if step (3) is changed
                 num_shares += 1
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
@@ -147,6 +148,7 @@ def run(sc):
                 tempval = average_cost*num_shares
                 average_cost = tempval
                 average_cost += float(r)
+                # will have to update num_shares below accordingly if step (3) is changed
                 num_shares += 1
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
@@ -161,6 +163,7 @@ def run(sc):
                 tempval = average_cost*num_shares
                 average_cost = tempval
                 average_cost += float(r)
+                # will have to update num_shares below accordingly if step (3) is changed
                 num_shares += 1
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
@@ -175,6 +178,7 @@ def run(sc):
                 tempval = average_cost*num_shares
                 average_cost = tempval
                 average_cost += float(r)
+                # will have to update num_shares below accordingly if step (3) is changed
                 num_shares += 1
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
@@ -189,6 +193,7 @@ def run(sc):
                 tempval = average_cost*num_shares
                 average_cost = tempval
                 average_cost += float(r)
+                # will have to update num_shares below accordingly if step (3) is changed
                 num_shares += 1
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
@@ -213,6 +218,7 @@ def run(sc):
             tempval = average_cost*num_shares
             average_cost = tempval
             average_cost += float(r)
+            # will have to update num_shares below accordingly if step (3) is changed
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
@@ -226,6 +232,7 @@ def run(sc):
             tempval = average_cost*num_shares
             average_cost = tempval
             average_cost += float(r)
+            # will have to update num_shares below accordingly if step (3) is changed
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
@@ -239,6 +246,7 @@ def run(sc):
             tempval = average_cost*num_shares
             average_cost = tempval
             average_cost += float(r)
+            # will have to update num_shares below accordingly if step (3) is changed
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
@@ -252,6 +260,7 @@ def run(sc):
             tempval = average_cost*num_shares
             average_cost = tempval
             average_cost += float(r)
+            # will have to update num_shares below accordingly if step (3) is changed
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
@@ -265,6 +274,7 @@ def run(sc):
             tempval = average_cost*num_shares
             average_cost = tempval
             average_cost += float(r)
+            # will have to update num_shares below accordingly if step (3) is changed
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
@@ -286,6 +296,7 @@ def run(sc):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
+                # will have to update num_shares below accordingly if step (4) is changed
                 num_shares -= 1.0
                 
         elif counter2 == 5:
@@ -296,6 +307,7 @@ def run(sc):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
+                # will have to update num_shares below accordingly if step (4) is changed
                 num_shares -= 1.0
                 
         elif counter2 == 4:
@@ -306,6 +318,7 @@ def run(sc):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
+                # will have to update num_shares below accordingly if step (4) is changed
                 num_shares -= 1.0
                 
         elif counter2 == 3:
@@ -316,6 +329,7 @@ def run(sc):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
+                # will have to update num_shares below accordingly if step (4) is changed
                 num_shares -= 1.0
                 
         elif counter2 == 2:
@@ -326,6 +340,7 @@ def run(sc):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
+                # will have to update num_shares below accordingly if step (4) is changed
                 num_shares -= 1.0
 
 
@@ -346,6 +361,7 @@ def run(sc):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
+            # will have to update num_shares below accordingly if step (4) is changed
             num_shares -= 1.0
             
         elif float(r)*0.993 > float(SE3P[2]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
@@ -355,6 +371,7 @@ def run(sc):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
+            # will have to update num_shares below accordingly if step (4) is changed
             num_shares -= 1.0
             
         elif float(r)*0.991 > float(SE3P[3]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
@@ -373,6 +390,7 @@ def run(sc):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
+            # will have to update num_shares below accordingly if step (4) is changed
             num_shares -= 1.0
             
         elif float(r)*0.987 > float(SE3P[5]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
@@ -382,6 +400,7 @@ def run(sc):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
+            # will have to update num_shares below accordingly if step (4) is changed
             num_shares -= 1.0
 
     # Keeps track of counter

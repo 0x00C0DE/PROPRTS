@@ -44,11 +44,12 @@ counter1 = 1.0
 counter2 = 1.0
 
 # note if you change the shares2Sell you must also update the num_shares when selling because it's current set
-# to update as (num_shares -= 6.0) below at the bottom, when selling since 120/20 = 6.
+# to update as (num_shares -= 6.0) below at the bottom in the sell section, when selling since 120/20 = 6.
 # step (4)
 Shares2Sell = 120
 
-# note if you change the shares2buy you must also update the num_shares accordingly.
+# note if you change the shares2buy you must also update the num_shares accordingly, because
+# it's currently set to update as (num_shares += 1) below in the buy section.
 # step (3)
 Shares2Buy = 20
 

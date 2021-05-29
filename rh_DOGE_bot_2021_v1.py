@@ -43,8 +43,9 @@ Mazda = []
 counter1 = 1.0
 counter2 = 1.0
 
+# do not touch
 Shares2Sell = 0.00
-
+# do not touch
 Shares2Buy = 0.00
 
 # step (5)

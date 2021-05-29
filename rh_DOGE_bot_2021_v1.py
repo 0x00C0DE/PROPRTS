@@ -27,7 +27,8 @@ import sys
 # If errors occur, simply re-update through redoing instructions above and restart the program.
 
 
-# Robinhood.login(username="example72", password="AnotherExample8")
+# Robin_stocks.login("example72", "AnotherExample8")
+# where "example72" is the username and "AnotherExample8" is the password
 totp = pyotp.TOTP("Sauce").now()
 login = robin_stocks.login("", "")
 

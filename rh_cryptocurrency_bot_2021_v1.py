@@ -90,7 +90,7 @@ def run(sc):
         Mazda = SE3P[1:6]
         SE3P = SE3P[-1:]
 
-        SE3P = Mazda + sE3P
+        SE3P = Mazda + SE3P
         print("Cleared and repositioned")
 
     if len(SE3P) == 1:

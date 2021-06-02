@@ -49,7 +49,7 @@ Shares2Buy = 0.00
 # step (5)
 # number of shares based on (total cost / Shares2Buy)
 # EX: ($2940 / 20) = 147
-num_shares = 147
+num_shares = 19
 
 # step (2)
 # average cost
@@ -192,19 +192,6 @@ def run(sc):
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
 
-        elif counter1 == 1:
-             if float(SE3P[0])*1.0025 > float(r) and float(r) < float(average_cost-float(average_cost*float(0.015))):
-
-                # instruction step (3) fill in amount in dollars in place of float(20)
-                Shares2Buy = math.floor(float(20) / float(r)-1)
-                crypto_BUY(ticker, Shares2Buy)
-                print("bought:", r)
-                tempval = average_cost*num_shares
-                average_cost = tempval
-                average_cost += float(r)
-                num_shares += 1
-                average_cost /= float(num_shares)
-                print("avg cost:" + str(average_cost))
     #BUY
     # if first price is < than 2nd
     # if it has been 30 minutes or more since the start of the program
@@ -294,6 +281,7 @@ def run(sc):
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
+            
     #SELL
     # if it's been less than 30 minutes since the start of the program
     if counter2 < 6:
@@ -353,17 +341,6 @@ def run(sc):
                 print("sold:", r)
                 print("avg cost:", average_cost)
                 num_shares -= 2.0
-                
-        elif counter2 == 1:
-            if float(SE3P[0])*1.007 < float(r) and float(r) > float(average_cost+float(average_cost*float(0.04))):
-
-                # instruction step (4) fill in amount in dollars in place of float(100)
-                Shares2Sell = math.floor(float(40) / float(r)+1)
-                crypto_SELL(ticker, Shares2Sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
-                num_shares -= 2.0
-
 
     #SELL
     # if it has been 30 minutes or more since the start of the program

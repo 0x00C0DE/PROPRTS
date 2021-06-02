@@ -361,7 +361,7 @@ def run(sc):
             print("avg cost:", average_cost)
             num_shares -= 2.0
         
-        if float(r)*0.995 > float(SE3P[1]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+        elif float(r)*0.995 > float(SE3P[1]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
 
             # instruction step (4) fill in amount in dollars in place of float(100)
             Shares2Sell = math.floor(float(40) / float(r)+1)

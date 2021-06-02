@@ -44,31 +44,30 @@ counter1 = 1.0
 counter2 = 1.0
 
 # note if you change the shares2Sell you must also update the num_shares when selling because it's current set
-# to update as (num_shares -= 6.0) below at the bottom in the sell section, when selling since 120/20 = 6.
+# to update as (num_shares -= 6.0) below at the bottom, when selling since 120/20 = 6.
 # step (4)
-Shares2Sell = 120
+Shares2Sell = 40
 
-# note if you change the shares2buy you must also update the num_shares accordingly, because
-# it's currently set to update as (num_shares += 1) below in the buy section.
+# note if you change the shares2buy you must also update the num_shares accordingly.
 # step (3)
 Shares2Buy = 20
 
 
 # step (5)
 # number of shares based on (total cost / Shares2Buy)
-# EX: ($2940 / $20) = 147
-num_shares = 147.00
+# EX: ($2940 / 20) = 147
+num_shares = 147
 
 # step (2)
 # average cost
-average_cost = 913.00
+average_cost = 69.43
 
 
 def run(sc):
 
     # step (1)
     # crypto currency ticker available on robinhood
-    ticker = "BCH"
+    ticker = "ETC"
 
     global SE3P 
     global Mazda
@@ -189,9 +188,8 @@ def run(sc):
         # If the current price multiplied by a set percentage, is less than one of the indices AND
         # the current price is lower than the average cost minus a set percentage, then buy Shares2Buy amount in dollars.
         # If Bought, updates the average_cost and num_shares.
-        
-        if float(r)*1.005 < float(SE3P[1]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
 
+        if float(r)*1.004 < float(SE3P[0]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
             crypto_BUY(ticker, Shares2Buy)
             print("bought:", r)
             tempval = average_cost*num_shares
@@ -200,7 +198,7 @@ def run(sc):
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
-        if float(r)*1.006 < float(SE3P[2]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
+        elif float(r)*1.005 < float(SE3P[1]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
             crypto_BUY(ticker, Shares2Buy)
             print("bought:", r)
             tempval = average_cost*num_shares
@@ -209,7 +207,7 @@ def run(sc):
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
-        if float(r)*1.007 < float(SE3P[3]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
+        elif float(r)*1.006 < float(SE3P[2]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
             crypto_BUY(ticker, Shares2Buy)
             print("bought:", r)
             tempval = average_cost*num_shares
@@ -218,7 +216,7 @@ def run(sc):
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
-        if float(r)*1.008 < float(SE3P[4]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
+        elif float(r)*1.007 < float(SE3P[3]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
             crypto_BUY(ticker, Shares2Buy)
             print("bought:", r)
             tempval = average_cost*num_shares
@@ -227,7 +225,16 @@ def run(sc):
             num_shares += 1
             average_cost /= float(num_shares)
             print("avg cost:" + str(average_cost))
-        if float(r)*1.01 < float(SE3P[5]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
+        elif float(r)*1.008 < float(SE3P[4]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
+            crypto_BUY(ticker, Shares2Buy)
+            print("bought:", r)
+            tempval = average_cost*num_shares
+            average_cost = tempval
+            average_cost += float(r)
+            num_shares += 1
+            average_cost /= float(num_shares)
+            print("avg cost:" + str(average_cost))
+        elif float(r)*1.01 < float(SE3P[5]) and float(r) < float(average_cost-float(average_cost*float(0.015))):
             crypto_BUY(ticker, Shares2Buy)
             print("bought:", r)
             tempval = average_cost*num_shares
@@ -251,31 +258,31 @@ def run(sc):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
-                num_shares -= 6.0
+                num_shares -= 2.0
         elif counter2 == 5:
             if float(SE3P[0])*1.0105 < float(r) and float(r) > float(average_cost+float(average_cost*float(0.04))):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
-                num_shares -= 6.0
+                num_shares -= 2.0
         elif counter2 == 4:
             if float(SE3P[0])*1.0095 < float(r) and float(r) > float(average_cost+float(average_cost*float(0.04))):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
-                num_shares -= 6.0
+                num_shares -= 2.0
         elif counter2 == 3:
             if float(SE3P[0])*1.0085 < float(r) and float(r) > float(average_cost+float(average_cost*float(0.04))):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
-                num_shares -= 6.0
+                num_shares -= 2.0
         elif counter2 == 2:
             if float(SE3P[0])*1.0075 < float(r) and float(r) > float(average_cost+float(average_cost*float(0.04))):
                 crypto_SELL(ticker, Shares2Sell)
                 print("sold:", r)
                 print("avg cost:", average_cost)
-                num_shares -= 6.0
+                num_shares -= 2.0
 
 
     #SELL
@@ -287,32 +294,37 @@ def run(sc):
         # If the current price multiplied by a set percentage, is greater than one of the indices AND
         # the current price is greater than the average cost plus a set percentage, then sell Shares2Sell amount in dollars.
         # If Sold, updates the average_cost and num_shares.
-        
-        if float(r)*0.995 > float(SE3P[1]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+
+        if float(r)*0.996 > float(SE3P[1]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
-            num_shares -= 6.0
-        if float(r)*0.993 > float(SE3P[2]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+            num_shares -= 2.0
+        elif float(r)*0.995 > float(SE3P[1]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
-            num_shares -= 6.0
-        if float(r)*0.991 > float(SE3P[3]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+            num_shares -= 2.0
+        elif float(r)*0.993 > float(SE3P[2]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
-            num_shares -= 6.0
-        if float(r)*0.989 > float(SE3P[4]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+            num_shares -= 2.0
+        elif float(r)*0.991 > float(SE3P[3]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
-            num_shares -= 6.0
-        if float(r)*0.987 > float(SE3P[5]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+            num_shares -= 2.0
+        elif float(r)*0.989 > float(SE3P[4]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)
-            num_shares -= 6.0
+            num_shares -= 2.0
+        elif float(r)*0.987 > float(SE3P[5]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+            crypto_SELL(ticker, Shares2Sell)
+            print("sold:", r)
+            print("avg cost:", average_cost)
+            num_shares -= 2.0
 
     # Keeps track of counter
     print("c1:" + str(counter1))

@@ -49,7 +49,7 @@ Shares2Buy = 0.00
 # step (5)
 # number of shares based on (total cost / Shares2Buy)
 # EX: ($2940 / 20) = 147
-num_shares = 19
+num_shares = 147
 
 # step (2)
 # average cost

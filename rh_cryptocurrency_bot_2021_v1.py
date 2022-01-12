@@ -295,7 +295,7 @@ def run(sc):
         # the current price is greater than the average cost plus a set percentage, then sell Shares2Sell amount in dollars.
         # If Sold, updates the average_cost and num_shares.
 
-        if float(r)*0.996 > float(SE3P[1]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
+        if float(r)*0.996 > float(SE3P[0]) and float(r) > float(average_cost+float(average_cost*float(0.04))):
             crypto_SELL(ticker, Shares2Sell)
             print("sold:", r)
             print("avg cost:", average_cost)

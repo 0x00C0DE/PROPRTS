@@ -412,6 +412,9 @@ def run(sc):
     counter1 += 1
     counter2 += 1
     
+    if num_shares <= 0:
+        sys.exit()
+        
     # calls scheduler every 5 minutes
     s.enter(300, 1, run, (sc,))
 

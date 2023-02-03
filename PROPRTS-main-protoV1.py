@@ -147,10 +147,12 @@ def run(sc):
         yy.append(line[1])
         yy = [float(i) for i in yy]
     file1.close()
-    x.clear()
+       x.clear()
     y.clear()
-    x = xx
-    y = yy
+    x = [float(i) for i in xx]
+    y = [float(i) for i in yy]
+    xx.clear()
+    yy.clear()
         
     # crypto currency ticker available on robinhood
     ticker = "MATIC"

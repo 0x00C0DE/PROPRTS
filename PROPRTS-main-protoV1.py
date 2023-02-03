@@ -383,7 +383,7 @@ def run(sc):
     print("numOfRuns:" + str(numOfRuns))
     numOfRuns += 1
     
-    # calls scheduler every 10 seconds
+    # calls scheduler every 60 seconds (1 minute)
     s.enter(60, 1, run, (sc,))
 
 # Functions to buy and sell crypto currency   

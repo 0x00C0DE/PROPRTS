@@ -15,8 +15,8 @@ from datetime import datetime, timedelta
 # A Robinhood bot created to automatically monitor and trade crypto currency currently supported by Robinhood.
 # Works specifically for DOGE, but can work for other tokens that have miniscule values.
 #
-# This bot runs a scheduler every 10 seconds in order to update the prices on a 10 second interval for a 
-# list that will hold the previous prices for past 1 minute.
+# This bot runs a scheduler every 60 seconds in order to update the prices on a 60 second interval for a 
+# list that will hold the previous prices for past 6 minute.
 # 
 # This bot [REQUIRES] a individual to already have SET amount of shares of the current crypto they want to trade.
 # 
@@ -40,7 +40,7 @@ login = robin_stocks.login("email_here@test.com", "password_here")
 # Scheduler created to run every n seconds
 s = sched.scheduler(time.time, time.sleep)
 
-# 10 second interval price history list, for every 1 minute
+# 60 second interval price history list, for every 6 minute
 historicalPrices = []
 reorderArray = []
 

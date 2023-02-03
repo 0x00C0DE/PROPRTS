@@ -155,7 +155,7 @@ def run(sc):
     '''
     End of linear regression section
     '''
-    # calls scheduler every 15 minutes
+    # calls scheduler every 1 minutes
     s.enter(60, 1, run, (sc,))
     
 def myfunc(x):

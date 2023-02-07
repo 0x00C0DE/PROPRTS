@@ -17,7 +17,6 @@ from robin_stocks.profiles import *
 
 # Program description:
 # A Robinhood bot created to automatically monitor and trade crypto currency currently supported by Robinhood.
-# Works specifically for DOGE, but can work for other tokens that have miniscule values.
 #
 # This bot runs a scheduler every 60 seconds in order to update the prices on a 60 second interval for a 
 # list that will hold the previous prices for past 6 minute.
@@ -26,7 +25,7 @@ from robin_stocks.profiles import *
 # 
 #   Instructions after entering in login information (no particular order):
 #
-#       1. Fill in ticker (since this bot is specifically for DOGE, should be left alone)
+#       1. Fill in ticker
 #       2. Fill in average_cost
 #       3. Fill in Shares2Buy amount (in dollars $)
 #       4. Fill in Shares2Sell amount (in dollars $)
@@ -44,7 +43,7 @@ login = robin_stocks.login("email_here@test.com", "password_here")
 # Scheduler created to run every 60 seconds
 s = sched.scheduler(time.time, time.sleep)
 
-# 10 second interval price history list, for every 1 minute
+# 60 second interval price history list, for every 1 minute
 historicalPrices = []
 reorderArray = []
 
@@ -64,10 +63,9 @@ shares2buyDollar = 10
 updateSharesBuy = 0
 
 # step (5)
-# number of shares based on (total cost / Shares2Buy)
-# EX: ($100 / 2) = 50
-#num_shares = 1
+# enter in your true number of shares
 num_shares = 194.9839
+
 # step (2)
 # average cost (I usually set the average_cost to ((true avg cost) * 1.01225) ≈ 1.26
 # this, along with the ac_ceiling and ac_floor will help ensure that the program will only sell for profit, and buy to average down
@@ -353,7 +351,7 @@ def run(sc):
     # Keeps track of counter
     numOfRuns += 1
     
-    # calls scheduler every 10 seconds
+    # calls scheduler every 60 seconds
     s.enter(60, 1, run, (sc,))
 
 # Functions to buy and sell crypto currency   

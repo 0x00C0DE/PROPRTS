@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 import sched
 from scipy import stats
 from datetime import datetime, timedelta
+from time import sleep
+from robin_stocks.crypto import *
+from robin_stocks.helper import *
+from robin_stocks.profiles import *
 
 # Program description:
 # A Robinhood bot created to automatically monitor and trade crypto currency currently supported by Robinhood.
@@ -37,10 +41,10 @@ from datetime import datetime, timedelta
 totp = pyotp.TOTP("Sauce").now()
 login = robin_stocks.login("email_here@test.com", "password_here")
 
-# Scheduler created to run every n seconds
+# Scheduler created to run every 60 seconds
 s = sched.scheduler(time.time, time.sleep)
 
-# 60 second interval price history list, for every 6 minute
+# 10 second interval price history list, for every 1 minute
 historicalPrices = []
 reorderArray = []
 
@@ -48,33 +52,31 @@ reorderArray = []
 numOfRuns = 1.0
 
 Shares2Sell = 0.00
-
 # static amount of shares you want to sell in dollar amount
-shares2sellDollar = 12
+shares2sellDollar = 9
 
-# ratio of buy to sell 2:6 ≈ 1:3
-updateSharesSell = 3
-
+updateSharesSell = 0
 
 Shares2Buy = 0.00
 # static amount of shares you want to buy in dollar amount
-shares2buyDollar = 4
+shares2buyDollar = 10
 
-# ratio of buy to sell 2:6 ≈ 1:3
-updateSharesBuy = 1
+updateSharesBuy = 0
 
 # step (5)
 # number of shares based on (total cost / Shares2Buy)
 # EX: ($100 / 2) = 50
-num_shares = 9
+#num_shares = 1
+num_shares = 194.9839
 # step (2)
-# average cost
-average_cost = 1.24
+# average cost (I usually set the average_cost to ((true avg cost) * 1.01225) ≈ 1.26
+# this, along with the ac_ceiling and ac_floor will help ensure that the program will only sell for profit, and buy to average down
+average_cost = 1.26
 
 # average cost ceiling percentage (ensures there is a large enough disparity between the live price and the required minimal amount that is greater than the live price to obtain profitability when selling)
 # average cost floor percentage(ensures there is a large enough disparity between the live price and the required minimal amount that is lower than the live price to obtain profitability when buying)
-ac_ceiling = 0.01
-ac_floor = 0.0075
+ac_ceiling = 0.0075
+ac_floor = 0.02
 y = []
 yy = []
 x = []
@@ -131,11 +133,12 @@ def run(sc):
 
     global count
 
-    lrData1 = 'PROPRTS-1-LR-data.txt'
+    lrData1 = 'PROPRTS-1-LRv2-data.txt'
     
     # Using readlines()
     file1 = open(lrData1, 'r')
     Lines = file1.readlines()
+
 
     # Strips the newline character
     for line in Lines:
@@ -147,7 +150,7 @@ def run(sc):
         yy.append(line[1])
         yy = [float(i) for i in yy]
     file1.close()
-       x.clear()
+    x.clear()
     y.clear()
     x = [float(i) for i in xx]
     y = [float(i) for i in yy]
@@ -197,7 +200,6 @@ def run(sc):
 
     
     linear_Regression(x, y, pastPredictionMinutesAhead1, pastPredictionPrice1, pastPredictionDate1)
-    #print("pastPredictionMinutesAhead1 : ", pastPredictionMinutesAhead1)
     pastPredictionMinutesAhead1, pastPredictionPrice1, pastPredictionDate1 = removeExpiredPredictions(pastPredictionMinutesAhead1, pastPredictionPrice1, pastPredictionDate1)
     xyz1flag1, xyz1flag2,  xyz1flag5,  xyz1flag15,  xyz1flag30,  xyz1flag60,  xyz1flag120 = checkPastPredictions(pastPredictionMinutesAhead1, pastPredictionPrice1, pastPredictionDate1, cryptoSymbol, xyz1flag1, xyz1flag2,  xyz1flag5,  xyz1flag15,  xyz1flag30,  xyz1flag60,  xyz1flag120)
     '''
@@ -208,65 +210,43 @@ def run(sc):
         
         if numOfRuns == 6: 
             if float(historicalPrices[0])*0.993 > float(cryptoSymbol) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-                # instruction step (3) fill in amount in dollars in place of float(20)
                 priceCompareBuyFlag = True
-                
+
         elif numOfRuns == 5:
             if float(historicalPrices[0])*0.994 > float(cryptoSymbol) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-                
-                # instruction step (3) fill in amount in dollars in place of float(20)
                 priceCompareBuyFlag = True
 
         elif numOfRuns == 4:
             if float(historicalPrices[0])*0.995 > float(cryptoSymbol) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-                # instruction step (3) fill in amount in dollars in place of float(20)
                 priceCompareBuyFlag = True
-                
+
         elif numOfRuns == 3:
             if float(historicalPrices[0])*0.996 > float(cryptoSymbol) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-                # instruction step (3) fill in amount in dollars in place of float(20)
                 priceCompareBuyFlag = True
-                
+
         elif numOfRuns == 2:
             if float(historicalPrices[0])*0.997 > float(cryptoSymbol) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-                # instruction step (3) fill in amount in dollars in place of float(20)
                 priceCompareBuyFlag = True
 
     #BUY
     if numOfRuns >= 7:
 
         if float(cryptoSymbol)*1.07 < float(historicalPrices[0]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-            # instruction step (3) fill in amount in dollars in place of float(20)
             priceCompareBuyFlag = True
 
         elif float(cryptoSymbol)*1.006 < float(historicalPrices[1]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-            # instruction step (3) fill in amount in dollars in place of float(20)
             priceCompareBuyFlag = True
-            
+
         elif float(cryptoSymbol)*1.005 < float(historicalPrices[2]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-            # instruction step (3) fill in amount in dollars in place of float(20)
             priceCompareBuyFlag = True
-            
-        elif float(cryptoSymbol)*1.004 < float(historicalPrices[3]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
 
-            # instruction step (3) fill in amount in dollars in place of float(20)
+        elif float(cryptoSymbol)*1.004 < float(historicalPrices[3]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
             priceCompareBuyFlag = True
             
         elif float(cryptoSymbol)*1.003 < float(historicalPrices[4]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
-
-            # instruction step (3) fill in amount in dollars in place of float(20)
             priceCompareBuyFlag = True
-            
-        elif float(cryptoSymbol)*1.002 < float(historicalPrices[5]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
 
-            # instruction step (3) fill in amount in dollars in place of float(20)
+        elif float(cryptoSymbol)*1.002 < float(historicalPrices[5]) and float(cryptoSymbol) < float(average_cost-float(average_cost*float(ac_floor))):
             priceCompareBuyFlag = True
             
     #SELL
@@ -274,66 +254,45 @@ def run(sc):
                 
         if numOfRuns == 6:
             if float(historicalPrices[0])*1.007 < float(cryptoSymbol) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-                # instruction step (4) fill in amount in dollars in place of float(100)
                 priceCompareSellFlag = True
                 
         elif numOfRuns == 5:
             if float(historicalPrices[0])*1.006 < float(cryptoSymbol) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-                # instruction step (4) fill in amount in dollars in place of float(100)
                 priceCompareSellFlag = True
                 
         elif numOfRuns == 4:
             if float(historicalPrices[0])*1.005 < float(cryptoSymbol) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-                # instruction step (4) fill in amount in dollars in place of float(100)
                 priceCompareSellFlag = True
                 
         elif numOfRuns == 3:
             if float(historicalPrices[0])*1.004 < float(cryptoSymbol) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-                # instruction step (4) fill in amount in dollars in place of float(100)
                 priceCompareSellFlag = True
                 
         elif numOfRuns == 2:
             if float(historicalPrices[0])*1.003 < float(cryptoSymbol) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-                # instruction step (4) fill in amount in dollars in place of float(100)
                 priceCompareSellFlag = True
-
+                
     #SELL
     if numOfRuns >= 7:
 
         if float(cryptoSymbol)*0.993 > float(historicalPrices[0]) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-            # instruction step (4) fill in amount in dollars in place of float(100)
             priceCompareSellFlag = True
         
         elif float(cryptoSymbol)*0.994 > float(historicalPrices[1]) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-            # instruction step (4) fill in amount in dollars in place of float(100)
             priceCompareSellFlag = True
             
         elif float(cryptoSymbol)*0.995 > float(historicalPrices[2]) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-            # instruction step (4) fill in amount in dollars in place of float(100)
             priceCompareSellFlag = True
             
         elif float(cryptoSymbol)*0.996 > float(historicalPrices[3]) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-            # instruction step (4) fill in amount in dollars in place of float(100)
             priceCompareSellFlag = True
             
         elif float(cryptoSymbol)*0.997 > float(historicalPrices[4]) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-            # instruction step (4) fill in amount in dollars in place of float(100)
             priceCompareSellFlag = True
             
         elif float(cryptoSymbol)*0.998 > float(historicalPrices[5]) and float(cryptoSymbol) > float(average_cost+float(average_cost*float(ac_ceiling))):
-
-            # instruction step (4) fill in amount in dollars in place of float(100)
             priceCompareSellFlag = True
+
 
     '''
     End of price comparison pecentage change algorithm section
@@ -346,31 +305,41 @@ def run(sc):
     print("status of xyz1flag30: ", xyz1flag30)
     print("status of xyz1flag60: ", xyz1flag60)
     print("status of xyz1flag120: ", xyz1flag120)
-    
+    print("the numOfRuns is: ", str(numOfRuns))
+
+
     if priceCompareSellFlag == True and xyz1flag1 == True and xyz1flag2 == True and xyz1flag5 == True:
         Shares2Sell = math.floor((float(shares2sellDollar)) / (float(cryptoSymbol)))
-        crypto_SELL(ticker, Shares2Sell)
-        print("sold:", cryptoSymbol)
-        print("avg cost:", average_cost)
+        order = robin_stocks.orders.order_sell_crypto_by_price(ticker, float(shares2sellDollar))
+        print(order)
+        print("\nsold: ", float(cryptoSymbol)*0.996)
+        print("avg cost:", average_cost, "\n")
+        updateSharesSell = float(shares2sellDollar)/float(float(cryptoSymbol)*0.996)
+        num_shares -= updateSharesSell
+          
+    elif priceCompareSellFlag == True and xyz1flag15 == True and xyz1flag30 == True and xyz1flag60 == True and xyz1flag120 == True:
+        Shares2Sell = math.floor((float(shares2sellDollar)) / (float(cryptoSymbol)))
+        order = robin_stocks.orders.order_sell_crypto_by_price(ticker, float(shares2sellDollar))
+        print(order)
+        print("\nsold:", float(cryptoSymbol)*0.996)
+        print("avg cost:", average_cost, "\n")
+        updateSharesSell = float(shares2sellDollar)/float(float(cryptoSymbol)*0.996)
         num_shares -= updateSharesSell
 
-    if priceCompareSellFlag == True and xyz1flag15 == True and xyz1flag30 == True and xyz1flag60 == True and xyz1flag120 == True:
-        Shares2Sell = math.floor((float(shares2sellDollar)) / (float(cryptoSymbol)))
-        crypto_SELL(ticker, Shares2Sell)
-        print("sold:", cryptoSymbol)
-        print("avg cost:", average_cost)
-        num_shares -= updateSharesSell
     if priceCompareBuyFlag == True:
         Shares2Buy = math.floor((float(shares2buyDollar)) / (float(cryptoSymbol)))
-        crypto_BUY(ticker, Shares2Buy)
-        print("bought:", cryptoSymbol)
+        order = robin_stocks.orders.order_buy_crypto_by_price(ticker, float(shares2buyDollar))
+        print(order)
+        print("\nbought:", float(cryptoSymbol)*1.0039)
+        newShares = float(float(shares2buyDollar)*1.0039)
         tempval = average_cost*num_shares
         average_cost = tempval
-        average_cost += float(cryptoSymbol)*float(1.0039)
+        average_cost += newShares
+        updateSharesBuy = float(shares2buyDollar)/float(float(cryptoSymbol)*1.0039)
         num_shares += updateSharesBuy
         average_cost /= float(num_shares)
-        print("avg cost:" + str(average_cost))
-    
+        print("avg cost:", str(average_cost), "\n")
+            
     xyz1flag1 = False
     xyz1flag2 = False
     xyz1flag5 = False
@@ -382,26 +351,29 @@ def run(sc):
     priceCompareBuyFlag = False
 
     # Keeps track of counter
-    print("numOfRuns:" + str(numOfRuns))
     numOfRuns += 1
     
-    # calls scheduler every 60 seconds (1 minute)
+    # calls scheduler every 10 seconds
     s.enter(60, 1, run, (sc,))
 
 # Functions to buy and sell crypto currency   
 def crypto_BUY(ticker, amountD):
     cryptoSymbol = robin_stocks.orders.order_buy_crypto_by_quantity(ticker, float(amountD), timeInForce='gtc')
     print(cryptoSymbol)
+    print("ticker.state: ", cryptoSymbol.state)
+    return cryptoSymbol
 
 def crypto_SELL(ticker, amountD):
     cryptoSymbol = robin_stocks.orders.order_sell_crypto_by_quantity(ticker, float(amountD), timeInForce='gtc')
     print(cryptoSymbol)
+    print("ticker.state: ", cryptoSymbol.state)
+    return cryptoSymbol
+
 
 def myfunc(x):
     return slope * x + intercept
 
 def removeExpiredPredictions(pm, pp, pd):
-
     if len(pd) > 0:
         count = -1
         for i in pd:
@@ -428,21 +400,30 @@ def checkPastPredictions(pm, pp, pd, cryptoPrice, f1, f2, f5, f15, f30, f60, f12
     pp = [float(i) for i in pp]
     for i in range(len(pp)):
         if float(cryptoPrice) >= pp[i]:
+
             if pm[i] == 1:
                 f1 = True
+
             if pm[i] == 2:
                 f2 = True
+  
             if pm[i] == 5:
                 f5 = True
+  
             if pm[i] == 15:
                 f15 = True
+   
             if pm[i] == 30:
                 f30 = True
+
             if pm[i] == 60:
                 f60 = True
+    
             if pm[i] == 120:
                 f120 = True
+
     return (f1, f2, f5, f15, f30, f60, f120)
+
 
 def linear_Regression(xx, yy, pm, pp, pd):
     '''
@@ -458,15 +439,17 @@ def linear_Regression(xx, yy, pm, pp, pd):
     global std_err
     x = []
     y = []
-
     for i in xx:
         x.append(i)
     x = [float(i) for i in x]
     for i in yy:
         y.append(i)
     y = [float(i) for i in y]
+
     slope, intercept, r, p, std_err = stats.linregress(x, y)
+
     mymodel = list(map(myfunc, x))
+
     price_prediction(pm, pp, pd)
     
     print("slope:", slope)
@@ -478,8 +461,7 @@ def linear_Regression(xx, yy, pm, pp, pd):
     plt.clf()
     plt.scatter(x, y)
     plt.plot(x, mymodel)
-    plt.title("PROPRTS-main-1-V1")
-    plt.savefig("main_lr_protoV1.png")
+    plt.savefig("tempmain_linear_regression.png")
 
     '''
     End of linear regression section

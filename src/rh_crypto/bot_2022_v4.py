@@ -1,94 +1,78 @@
-import robin_stocks
 import math
-import pyotp
 import sched
 import time
-import sys
+from robin_stocks import robinhood
+from pyotp.totp import TOTP
+from os import environ
 
-# Program description:
-# A Robinhood bot created to automatically monitor and trade crypto currency currently supported by Robinhood.
-# Works specifically for DOGE, but can work for other tokens that have miniscule values.
-#
-# This bot runs a scheduler every 10 seconds in order to update the prices on a 10 second interval for a 
-# list that will hold the previous prices for past 1 minute.
-# 
-# This bot [REQUIRES] a individual to already have SET amount of shares of the current crypto they want to trade.
-# 
-#   Instructions after entering in login information (no particular order):
-#
-#       1. Fill in ticker (since this bot is specifically for DOGE, should be left alone)
-#       2. Fill in average_cost
-#       3. Fill in Shares2Buy amount (in dollars $)
-#       4. Fill in Shares2Sell amount (in dollars $)
-#       5. Fill in num_shares 
-#
+def run():
+    # Program description:
+    # A Robinhood bot created to automatically monitor and trade crypto currency currently supported by Robinhood.
+    # Works specifically for DOGE, but can work for other tokens that have miniscule values.
+    #
+    # This bot runs a scheduler every 10 seconds in order to update the prices on a 10 second interval for a 
+    # list that will hold the previous prices for past 1 minute.
+    # 
+    # This bot [REQUIRES] a individual to already have SET amount of shares of the current crypto they want to trade.
+    # 
+    #   Instructions after entering in login information (no particular order):
+    #
+    #       1. Fill in ticker (since this bot is specifically for DOGE, should be left alone)
+    #       2. Fill in average_cost
+    #       3. Fill in Shares2Buy amount (in dollars $)
+    #       4. Fill in Shares2Sell amount (in dollars $)
+    #       5. Fill in num_shares 
+    #
 
-# Some buying and selling errors will occur if a individual does not have enough shares to sell or enough money to buy.
-# If errors occur, simply re-update through redoing instructions above and restart the program.
+    # Some buying and selling errors will occur if a individual does not have enough shares to sell or enough money to buy.
+    # If errors occur, simply re-update through redoing instructions above and restart the program.
 
+    # Robinhood.login(username="example72", password="AnotherExample8")
+    
+    robinhood.authentication.login(
+        environ.get("RH_USERNAME"), 
+        environ.get("RH_PASSWORD"), 
+        TOTP("Sauce").now()
+    )
 
-# Robinhood.login(username="example72", password="AnotherExample8")
-totp = pyotp.TOTP("Sauce").now()
-login = robin_stocks.login("email_here@service.com", "password_here")
-
-# Scheduler created to run every 10 seconds
-s = sched.scheduler(time.time, time.sleep)
-
-# 10 second interval price history list, for every 1 minute
-SE3P = []
-Mazda = []
-
-
-counter1 = 1.0
-counter2 = 1.0
-
-Shares2Sell = 0.00
-shares2sellDollar = 6
-
-# ratio of buy to sell 2:6 ≈ 1:3
-updateSharesSell = 3
+    # 10 second interval price history list, for every 1 minute
+    SE3P = []
+    Mazda = []
 
 
-Shares2Buy = 0.00
-shares2buyDollar = 2
+    counter1 = 1.0
+    counter2 = 1.0
 
-# ratio of buy to sell 2:6 ≈ 1:3
-updateSharesBuy = 1
+    Shares2Sell = 0.00
+    shares2sellDollar = 6
 
-# step (5)
-# number of shares based on (total cost / Shares2Buy)
-# EX: ($100 / 2) = 50
-num_shares = 50
-# step (2)
-# average cost
-average_cost = 0.833000
+    # ratio of buy to sell 2:6 ≈ 1:3
+    updateSharesSell = 3
 
-# average cost ceiling percentage (ensures there is a large enough disparity between the live price and the required minimal amount that is greater than the live price to obtain profitability when selling)
-# average cost floor percentage(ensures there is a large enough disparity between the live price and the required minimal amount that is lower than the live price to obtain profitability when buying)
-ac_ceiling = 0.02
-ac_floor = 0.015
 
-def run(sc):
+    Shares2Buy = 0.00
+    shares2buyDollar = 2
+
+    # ratio of buy to sell 2:6 ≈ 1:3
+    updateSharesBuy = 1
+
+    # step (5)
+    # number of shares based on (total cost / Shares2Buy)
+    # EX: ($100 / 2) = 50
+    num_shares = 50
+    # step (2)
+    # average cost
+    average_cost = 0.833000
+
+    # average cost ceiling percentage (ensures there is a large enough disparity between the live price and the required minimal amount that is greater than the live price to obtain profitability when selling)
+    # average cost floor percentage(ensures there is a large enough disparity between the live price and the required minimal amount that is lower than the live price to obtain profitability when buying)
+    ac_ceiling = 0.02
+    ac_floor = 0.015
 
     # crypto currency ticker available on robinhood
     ticker = "MATIC"
 
-    global SE3P 
-    global Mazda
-
-    global ac_ceiling
-    global ac_floor
-    global updateSharesSell
-    global updateSharesBuy
-    
-    global Shares2Sell
-    global Shares2Buy
-    global counter1
-    global counter2
-    global average_cost
-    global num_shares
-    
-    r = robin_stocks.crypto.get_crypto_quote(ticker, info="mark_price")
+    r = robinhood.crypto.get_crypto_quote(ticker, info="mark_price")
     #r = robin_stocks.robinhood.get_latest_price(ticker)
     print(ticker + ": $" + str(r))
 
@@ -136,7 +120,7 @@ def run(sc):
     if counter1 < 7:
 
        if counter1 == 7: 
-            if float(SE3P[0])*1.006 > float(r) and float(r) < float(average_cost-float(average_cost*float(ac_floor))):
+        if float(SE3P[0])*1.006 > float(r) and float(r) < float(average_cost-float(average_cost*float(ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 Shares2Buy = math.floor(float(shares2buyDollar) / float(r)-1)
@@ -148,7 +132,6 @@ def run(sc):
                 num_shares += updateSharesBuy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-        
         elif counter1 == 6: 
             if float(SE3P[0])*1.005 > float(r) and float(r) < float(average_cost-float(average_cost*float(ac_floor))):
 
@@ -447,18 +430,22 @@ def run(sc):
     print("c2:" + str(counter2))
     counter1 += 1
     counter2 += 1
-    
-    # calls scheduler every 10 seconds
-    s.enter(10, 1, run, (sc,))
 
+    return {
+        "average_cost": average_cost,
+        "num_shares": num_shares,
+        "shares2buyDollar": shares2buyDollar,
+        "shares2sellDollar": shares2sellDollar,
+        "counter1": counter1,
+        "counter2": counter2,
+        "SE3P": SE3P,
+    }
+    
 # Functions to buy and sell crypto currency   
 def crypto_BUY(ticker, amountD):
-    r = robin_stocks.orders.order_buy_crypto_by_quantity(ticker, amountD)
+    r = robinhood.orders.order_buy_crypto_by_quantity(ticker, amountD)
     print(r)
 
 def crypto_SELL(ticker, amountD):
-    r = robin_stocks.orders.order_sell_crypto_by_quantity(ticker, amountD)
+    r = robinhood.orders.order_sell_crypto_by_quantity(ticker, amountD)
     print(r)
-
-s.enter(1, 1, run, (s,))
-s.run()

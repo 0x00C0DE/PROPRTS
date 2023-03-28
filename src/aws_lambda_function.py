@@ -1,16 +1,29 @@
-from json import dumps;
-from rh_crypto_bot_2022_v4 import run;
+from json import dumps
+from dotenv import load_dotenv
+from os import environ
+from rh_crypto.bot_2022_v4 import run
 
 def lambda_handler():
-    print("Running")
+    load_dotenv()
 
-    run()
-    
-    # TODO implement
+    body = None
+    status = 200
+
+    try:
+        print("Running")
+
+        body = run()
+        
+        print("Run successful")
+    except Exception as e:
+        print("Failed to run")
+        print(e)
+        body = e.__str__()
+
     return {
-        'statusCode': 200,
-        'body': dumps('Hello from Lambdasz!')
+        'statusCode': status,
+        'body': dumps(body)
     }
 
-def main():
+if not environ.get('AWS_LAMBDA_RUNTIME_API'):
     lambda_handler()

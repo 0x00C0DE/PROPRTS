@@ -2,6 +2,7 @@ name: deploy to lambda
 on: [push]
 jobs:
   deploy_source:
+    environment: prod
     name: build and deploy lambda
     strategy:
       matrix:

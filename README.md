@@ -1,5 +1,7 @@
 # PROPRTS
 
+[![Deploy](https://github.com/0x00C0DE/PROPRTS/actions/workflows/main.yml/badge.svg)](https://github.com/0x00C0DE/PROPRTS/actions/workflows/main.yml)
+
 A robinhood high frequency Predictive Reactive Observational Pattern Recognition Trading System
 
 Latest files:

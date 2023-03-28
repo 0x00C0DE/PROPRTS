@@ -4,8 +4,6 @@ from os import environ
 from rh_crypto.bot_2022_v4 import run
 
 def lambda_handler():
-    load_dotenv()
-
     body = None
     status = 200
 
@@ -26,4 +24,5 @@ def lambda_handler():
     }
 
 if not environ.get('AWS_LAMBDA_RUNTIME_API'):
+    load_dotenv()
     lambda_handler()

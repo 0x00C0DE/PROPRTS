@@ -20,8 +20,8 @@ jobs:
       - name: default deploy
         uses: appleboy/lambda-action@master
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_access_key_id: AKIAZFTDISTZORAHEYQ2
+          aws_secret_access_key: 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
           aws_region: us-west-2
           function_name: POPTARTS
           zip_file: bundle.zip

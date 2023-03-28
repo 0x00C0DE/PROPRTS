@@ -25,4 +25,4 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           function_name: POPTARTS
-          zip_file: bundle.zip
+          source: aws_lambda_function.py

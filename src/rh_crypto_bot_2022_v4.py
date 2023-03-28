@@ -136,7 +136,7 @@ def run(sc):
     if counter1 < 7:
 
        if counter1 == 7: 
-            if float(SE3P[0])*1.006 > float(r) and float(r) < float(average_cost-float(average_cost*float(ac_floor))):
+        if float(SE3P[0])*1.006 > float(r) and float(r) < float(average_cost-float(average_cost*float(ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 Shares2Buy = math.floor(float(shares2buyDollar) / float(r)-1)
@@ -148,7 +148,6 @@ def run(sc):
                 num_shares += updateSharesBuy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-        
         elif counter1 == 6: 
             if float(SE3P[0])*1.005 > float(r) and float(r) < float(average_cost-float(average_cost*float(ac_floor))):
 

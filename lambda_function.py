@@ -1,5 +1,5 @@
 import json
-from src.aws import init
+from aws.mainFunction import init
 
 def lambda_handler(event, context):
     init()

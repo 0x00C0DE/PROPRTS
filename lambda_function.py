@@ -1,6 +1,7 @@
 import json
 from aws.mainFunction import init
 
+
 def lambda_handler(event, context):
     init()
 

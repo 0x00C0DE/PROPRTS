@@ -1,16 +1,14 @@
 from json import dumps
-from dotenv import load_dotenv
-from os import environ
-from rh_crypto.bot_2022_v4 import run
+from rh_crypto.bot_2022_v4 import run as runCrypto
 
-def lambda_handler():
+def run():
     body = None
     status = 200
 
     try:
         print("Running")
 
-        body = run()
+        body = runCrypto()
         
         print("Run successful")
     except Exception as e:
@@ -23,8 +21,3 @@ def lambda_handler():
         'statusCode': status,
         'body': dumps(body)
     }
-
-def init():
-    if not environ.get('AWS_LAMBDA_RUNTIME_API'):
-        load_dotenv()
-        lambda_handler()

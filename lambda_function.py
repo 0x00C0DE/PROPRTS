@@ -10,6 +10,7 @@ if not environ.get('AWS_LAMBDA_RUNTIME_API'):
 from aws.mainFunction import run
 from dotenv import load_dotenv
 
+
 def lambda_handler(event, context):
     run()
 

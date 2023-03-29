@@ -4,7 +4,7 @@ import time
 
 import sys
 
-sys.path.insert(0, "/python/lib/python3.9/site-packages")
+print(sys.path)
 
 from robin_stocks import robinhood
 from pyotp.totp import TOTP

@@ -3,9 +3,7 @@ import sys
 from os import environ
 
 sys.path.insert(0, "./src")
-
-if not environ.get('AWS_LAMBDA_RUNTIME_API'):
-    sys.path.insert(0, "./python/lib/python3.9/site-packages")
+sys.path.insert(0, "./python/lib/python3.9/site-packages")
 
 from aws.mainFunction import run
 from dotenv import load_dotenv

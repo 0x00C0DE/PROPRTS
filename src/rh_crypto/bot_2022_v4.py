@@ -1,6 +1,11 @@
 import math
 import sched
 import time
+
+import sys
+
+sys.path.insert(0, "/python/lib/python3.9/site-packages")
+
 from robin_stocks import robinhood
 from pyotp.totp import TOTP
 from os import environ

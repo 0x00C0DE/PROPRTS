@@ -16,6 +16,7 @@ def lambda_handler():
     except Exception as e:
         print("Failed to run")
         print(e)
+        
         body = e.__str__()
 
     return {
@@ -23,6 +24,7 @@ def lambda_handler():
         'body': dumps(body)
     }
 
-if not environ.get('AWS_LAMBDA_RUNTIME_API'):
-    load_dotenv()
-    lambda_handler()
+def init():
+    if not environ.get('AWS_LAMBDA_RUNTIME_API'):
+        load_dotenv()
+        lambda_handler()

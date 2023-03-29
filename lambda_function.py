@@ -2,7 +2,7 @@ import json
 import sys
 
 sys.path.insert(0, "./src")
-sys.path.insert(0, "./python/lib/python3.9/site-packages")
+# sys.path.insert(0, "./python/lib/python3.9/site-packages")
 
 from os import environ
 

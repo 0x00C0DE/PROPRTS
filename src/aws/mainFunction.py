@@ -16,6 +16,7 @@ def lambda_handler():
     except Exception as e:
         print("Failed to run")
         print(e)
+        
         body = e.__str__()
 
     return {

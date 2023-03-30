@@ -1,24 +1,57 @@
-import json
 import sys
 from os import environ
 
-sys.path.insert(0, "./src")
+sys.path.insert(0, './src')
 
-if not environ.get('AWS_LAMBDA_RUNTIME_API'):
-    sys.path.insert(0, "./python/lib/python3.9/site-packages")
+def is_local():
+    return not environ.get('AWS_LAMBDA_RUNTIME_API')
 
-from aws.mainFunction import run
-from dotenv import load_dotenv
+# DO NOT IMPORT THIRD-PARTY LIBRARIES BEFORE THIS LINE.
+if is_local():
+    sys.path.insert(0, './python-local/lib/python3.9/site-packages')
+else:
+    sys.path.insert(0, './python-aws/lib/python3.9/site-packages')
 
+from json import dumps  # noqa: E402
+from dotenv import load_dotenv  # noqa: E402
+from proprts.main_proto_v1 import runBot  # noqa: E402
+from scheduler import Scheduler  # noqa: E402
 
 def lambda_handler(event, context):
-    run()
+    print('Lambda handler')
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps('Hello from IRV LOCAL')
-    }
-if not environ.get('AWS_LAMBDA_RUNTIME_API'):
+    scheduler = Scheduler()
 
+    if scheduler.should_run:
+        scheduler.start(runBot)
+    else:
+        return runBot()
+
+def run():
+    body = None
+    status = 200
+
+    try:
+        print('Running')
+
+        body = run()
+        
+        print('Run successful')
+    except Exception as e:
+        print('Failed to run')
+        print(e)
+        
+        status = 500
+        body = e.__str__()
+
+    if is_local():
+        print(body)
+    else:
+        return {
+            'statusCode': status,
+            'body': dumps(body)
+        }
+
+if is_local():
     load_dotenv()
     lambda_handler(None, None)

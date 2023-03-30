@@ -147,8 +147,7 @@ class Bot:
             print(self.seep)
     def buy(self):
         if self.counter_one == 7: 
-            if float(self.seep[0])*1.006 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            if self.calculate_seep_one(self.seep[0], 1.006):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -160,8 +159,7 @@ class Bot:
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
         elif self.counter_one == 6: 
-            if float(self.seep[0])*1.005 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            if self.calculate_seep_one(self.seep[0], 1.005):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -174,8 +172,7 @@ class Bot:
                 print("avg cost:" + str(average_cost))
                 
         elif self.counter_one == 5:
-            if float(self.seep[0])*1.0045 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-                
+            if self.calculate_seep_one(self.seep[0], 1.0045):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -188,8 +185,7 @@ class Bot:
                 print("avg cost:" + str(average_cost))
                 
         elif self.counter_one == 4:
-            if float(self.seep[0])*1.004 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            if self.calculate_seep_one(self.seep[0], 1.004):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -202,8 +198,7 @@ class Bot:
                 print("avg cost:" + str(average_cost))
                 
         elif self.counter_one == 3:
-            if float(self.seep[0])*1.0035 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            if self.calculate_seep_one(self.seep[0], 1.0035):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -216,8 +211,7 @@ class Bot:
                 print("avg cost:" + str(average_cost))
                 
         elif self.counter_one == 2:
-            if float(self.seep[0])*1.003 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            if self.calculate_seep_one(self.seep[0], 1.003):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -229,8 +223,7 @@ class Bot:
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
         elif self.counter_one >= 7:
-            if float(self.quote)*1.004 < float(self.seep[0]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            if self.calculate_seep_two(self.seep[0], 1.004):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -241,9 +234,7 @@ class Bot:
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-                
-            elif float(self.quote)*1.005 < float(self.seep[1]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            elif self.calculate_seep_two(self.seep[1], 1.005):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -254,9 +245,7 @@ class Bot:
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-                
-            elif float(self.quote)*1.006 < float(self.seep[2]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            elif self.calculate_seep_two(self.seep[2], 1.006):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -268,8 +257,7 @@ class Bot:
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
                 
-            elif float(self.quote)*1.007 < float(self.seep[3]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            elif self.calculate_seep_two(self.seep[3], 1.007):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -280,9 +268,7 @@ class Bot:
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-                
-            elif float(self.quote)*1.008 < float(self.seep[4]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            elif self.calculate_seep_two(self.seep[4], 1.008):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -293,9 +279,7 @@ class Bot:
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-                
-            elif float(self.quote)*1.01 < float(self.seep[5]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            elif self.calculate_seep_two(self.seep[5], 1.01):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -306,9 +290,7 @@ class Bot:
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-
-            elif float(self.quote)*1.013 < float(self.seep[6]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+            elif self.calculate_seep_two(self.seep[6], 1.013):
                 # instruction step (3) fill in amount in dollars in place of float(20)
                 shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
@@ -445,3 +427,7 @@ class Bot:
                 print("sold:", self.quote)
                 print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
+    def calculate_seep_one(self, seep, amount: float):
+        return float(seep) * amount > float(self.quote) and float(self.quote) < float(self.average_cost - float(self.average_cost * float(self.ac_floor)))
+    def calculate_seep_two(self, seep, amount: float):
+        return float(self.quote)* amount < float(seep) and float(self.quote) < float(self.average_cost - float(self.average_cost * float(self.ac_floor)))

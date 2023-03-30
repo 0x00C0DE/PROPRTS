@@ -1,6 +1,5 @@
 import sys
 import time
-from sched import scheduler
 
 class Scheduler:
     should_run: bool = False
@@ -13,13 +12,11 @@ class Scheduler:
         if len(sys.argv) == 3:
             self.should_run = True if sys.argv[1] else False
             self.interval_seconds = float(sys.argv[2])
-    def tick(self):
-            print("tick")
     def start(self, run):
         run()
 
         time.sleep(self.interval_seconds)
-        
+
         self.start(run)
 
 

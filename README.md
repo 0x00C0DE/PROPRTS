@@ -22,4 +22,11 @@ Latest files:
 - Run the script
 `python3 lambda_function.py`
 
+## Tools
+
+- Install "ruff" extension in IDE.
+
+- Use this to get a list of lint errors (will fail the pipeline in the future):
+`ruff check --format=github --target-version=py39 ./src`
+
 Instructions are located within the scripts source code via comments in PROPRTS-main-protoV1.py

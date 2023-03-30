@@ -22,6 +22,13 @@ Latest files:
 - Run the script
 `python3 lambda_function.py`
 
+## Running on AWS Lambda
+
+- Set up environment variables and secrets.
+
+- Update python-aws. You MUST do this every time you add a package. You also need to do this inside an amazonlinux docker container.
+`pip install --target ./python-aws/lib/python3.9/site-packages -r requirements.txt --upgrade`
+
 ## Tools
 
 - Install "ruff" extension in IDE.

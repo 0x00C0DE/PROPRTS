@@ -14,7 +14,12 @@ Latest files:
 ## Running Locally
 
 - Copy .env.example to .env and edit the values accordignly.
-- Install python with `pip install --target ./python-local/lib/python3.9/site-packages -r requirements.txt --upgrade`
-- Run python3 ./src/aws_lambda_function.py in the main folder.
+`cp .env.example .env`
+
+- Install python with
+`pip install --target ./python-local/lib/python3.9/site-packages -r requirements.txt --upgrade`
+
+- Run the script
+`python3 lambda_function.py`
 
 Instructions are located within the scripts source code via comments in PROPRTS-main-protoV1.py

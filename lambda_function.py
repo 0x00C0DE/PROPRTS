@@ -5,10 +5,11 @@ from os import environ
 sys.path.insert(0, "./src")
 
 def is_local():
-    environ.get('AWS_LAMBDA_RUNTIME_API') == ''
+    return not environ.get('AWS_LAMBDA_RUNTIME_API')
+
 
 if is_local():
-    sys.path.insert(0, "./python/lib/python3.9/site-packages")
+    sys.path.insert(0, "./python-local/lib/python3.9/site-packages")
 else:
     sys.path.insert(0, "./python-local/lib/python3.9/site-packages")
 
@@ -16,6 +17,8 @@ from aws.mainFunction import run
 from dotenv import load_dotenv
 
 def lambda_handler(event, context):
+    print('Lambda handler')
+
     run()
 
     return {

@@ -62,6 +62,8 @@ class Bot:
     # crypto currency ticker available on robinhood
     ticker = "MATIC"
 
+    quote = None
+
     def run(self):
         robinhood.authentication.login(
             environ.get("RH_USERNAME"), 
@@ -69,378 +71,377 @@ class Bot:
             TOTP("Sauce").now()
         )
 
-        r = robinhood.crypto.get_crypto_quote(self.ticker, info="mark_price")
-        #r = robin_stocks.robinhood.get_latest_price(ticker)
-        print(self.ticker + ": $" + str(r))
+        self.quote = robinhood.crypto.get_crypto_quote(self.ticker, info="mark_price")
 
-        seep.append(r)
+        print(self.ticker + ": $" + str(self.quote))
 
-        if len(seep) > 6:
+        self.seeps()
+        self.buy()
+        self.sell()
+
+        # Keeps track of counter
+        print("c1:" + str(self.counter_one))
+        print("c2:" + str(self.counter_two))
+        self.counter_one += 1
+        self.counter_two += 1
+
+        return {
+            "average_cost": self.average_cost,
+            "num_shares": self.num_shares,
+            "shares_to_buy_dollar": self.shares_to_buy_dollar,
+            "shares_to_sell_dollar": self.shares_to_sell_dollar,
+            "counter_one": self.counter_one,
+            "counter_two": self.counter_two,
+            "seep": self.seep,
+        }
+        
+    # Functions to buy and sell crypto currency   
+    def buy(self):
+        self.quote = robinhood.orders.order_buy_crypto_by_quantity(self.ticker, self.amountD)
+        print(self.quote)
+
+    def sell(self):
+        self.quote = robinhood.orders.order_sell_crypto_by_quantity(self.ticker,self.amountD)
+        print(self.quote)
+
+    def seeps(self):
+        self.seep.append(self.quote)
+
+        seepLen = len(self.seep)
+
+        if seepLen > 6:
             # if there are 5 or more elements in the list, rearrange positions
-            mazda = seep[1:7]
-            seep = seep[-1:]
+            self.mazda = self.self.seep[1:7]
+            self.seep = self.self.seep[-1:]
 
-            seep = mazda + seep
+            self.seep = self.mazda + self.seep
             print("Cleared and repositioned")
 
-        if len(seep) == 1:
+        if seepLen == 1:
             #0sec
-            print("appended seep[0]")
-            print(seep)
-        elif len(seep) == 2:
-            #seep.append(r) #10sec
-            print("appended seep[1]")
-            print(seep)
-        elif len(seep) == 3:
-            #seep.append(r) #20sec
-            print("appended seep[2]")
-            print(seep)
-        elif len(seep) == 4:
-            #seep.append(r) #30sec
-            print("appended seep[3]")
-            print(seep)
-        elif len(seep) == 5:
-            #seep.append(r) #40sec
-            print("appended seep[4]")
-            print(seep)
-        elif len(seep) == 6:
-            #seep.append(r) #50sec
-            print("appended seep[5]")
-            print(seep)
-        elif len(seep) == 7:
-            #seep.append(r) #60sec/1min
-            print("appended seep[6]")
-            print(seep)
-
-        # BUY
-        if counter_one < 7:
-            if counter_one == 7: 
-                if float(seep[0])*1.006 > float(r) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
-                    # instruction step (3) fill in amount in dollars in place of float(20)
-                    shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
-                    self.buy(self.ticker, shares_to_buy)
-                    print("bought:", r)
-                    tempval = average_cost*num_shares
-                    average_cost = tempval
-                    average_cost += float(r)
-                    num_shares += self.update_shares_buy
-                    average_cost /= float(num_shares)
-                    print("avg cost:" + str(average_cost))
-            elif counter_one == 6: 
-                if float(seep[0])*1.005 > float(r) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
-                    # instruction step (3) fill in amount in dollars in place of float(20)
-                    shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
-                    self.buy(self.ticker, shares_to_buy)
-                    print("bought:", r)
-                    tempval = average_cost*num_shares
-                    average_cost = tempval
-                    average_cost += float(r)
-                    num_shares += self.update_shares_buy
-                    average_cost /= float(num_shares)
-                    print("avg cost:" + str(average_cost))
-                    
-            elif counter_one == 5:
-                if float(seep[0])*1.0045 > float(r) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
-                    
-                    # instruction step (3) fill in amount in dollars in place of float(20)
-                    shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
-                    self.buy(self.ticker, shares_to_buy)
-                    print("bought:", r)
-                    tempval = average_cost*num_shares
-                    average_cost = tempval
-                    average_cost += float(r)
-                    num_shares += self.update_shares_buy
-                    average_cost /= float(num_shares)
-                    print("avg cost:" + str(average_cost))
-                    
-            elif counter_one == 4:
-                if float(seep[0])*1.004 > float(r) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
-                    # instruction step (3) fill in amount in dollars in place of float(20)
-                    shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
-                    self.buy(self.ticker, shares_to_buy)
-                    print("bought:", r)
-                    tempval = average_cost*num_shares
-                    average_cost = tempval
-                    average_cost += float(r)
-                    num_shares += self.update_shares_buy
-                    average_cost /= float(num_shares)
-                    print("avg cost:" + str(average_cost))
-                    
-            elif counter_one == 3:
-                if float(seep[0])*1.0035 > float(r) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
-                    # instruction step (3) fill in amount in dollars in place of float(20)
-                    shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
-                    self.buy(self.ticker, shares_to_buy)
-                    print("bought:", r)
-                    tempval = average_cost*num_shares
-                    average_cost = tempval
-                    average_cost += float(r)
-                    num_shares += self.update_shares_buy
-                    average_cost /= float(num_shares)
-                    print("avg cost:" + str(average_cost))
-                    
-            elif counter_one == 2:
-                if float(seep[0])*1.003 > float(r) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
-                    # instruction step (3) fill in amount in dollars in place of float(20)
-                    shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
-                    self.buy(self.ticker, shares_to_buy)
-                    print("bought:", r)
-                    tempval = average_cost*num_shares
-                    average_cost = tempval
-                    average_cost += float(r)
-                    num_shares += self.update_shares_buy
-                    average_cost /= float(num_shares)
-                    print("avg cost:" + str(average_cost))
-
-        #BUY
-        if counter_one >= 7:
-
-            if float(r)*1.004 < float(seep[0]) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
+            print("appended self.seep[0]")
+            print(self.seep)
+        elif seepLen == 2:
+            #seep.append(self.quote) #10sec
+            print("appended self.seep[1]")
+            print(self.seep)
+        elif seepLen == 3:
+            #seep.append(self.quote) #20sec
+            print("appended self.seep[2]")
+            print(self.seep)
+        elif seepLen == 4:
+            #seep.append(self.quote) #30sec
+            print("appended self.seep[3]")
+            print(self.seep)
+        elif seepLen == 5:
+            #seep.append(self.quote) #40sec
+            print("appended self.seep[4]")
+            print(self.seep)
+        elif seepLen == 6:
+            #seep.append(self.quote) #50sec
+            print("appended self.seep[5]")
+            print(self.seep)
+        elif seepLen == 7:
+            #seep.append(self.quote) #60sec/1min
+            print("appended self.seep[6]")
+            print(self.seep)
+    def buy(self):
+        if self.counter_one == 7: 
+            if float(self.seep[0])*1.006 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
-                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
-                print("bought:", r)
+                print("bought:", self.quote)
                 tempval = average_cost*num_shares
                 average_cost = tempval
-                average_cost += float(r)
+                average_cost += float(self.quote)
+                num_shares += self.update_shares_buy
+                average_cost /= float(num_shares)
+                print("avg cost:" + str(average_cost))
+        elif self.counter_one == 6: 
+            if float(self.seep[0])*1.005 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
+
+                # instruction step (3) fill in amount in dollars in place of float(20)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
+                self.buy(self.ticker, shares_to_buy)
+                print("bought:", self.quote)
+                tempval = average_cost*num_shares
+                average_cost = tempval
+                average_cost += float(self.quote)
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
                 
-            elif float(r)*1.005 < float(seep[1]) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
-
+        elif self.counter_one == 5:
+            if float(self.seep[0])*1.0045 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
+                
                 # instruction step (3) fill in amount in dollars in place of float(20)
-                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
-                print("bought:", r)
+                print("bought:", self.quote)
                 tempval = average_cost*num_shares
                 average_cost = tempval
-                average_cost += float(r)
+                average_cost += float(self.quote)
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
                 
-            elif float(r)*1.006 < float(seep[2]) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
+        elif self.counter_one == 4:
+            if float(self.seep[0])*1.004 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
-                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
-                print("bought:", r)
+                print("bought:", self.quote)
                 tempval = average_cost*num_shares
                 average_cost = tempval
-                average_cost += float(r)
+                average_cost += float(self.quote)
+                num_shares += self.update_shares_buy
+                average_cost /= float(num_shares)
+                print("avg cost:" + str(average_cost))
+                
+        elif self.counter_one == 3:
+            if float(self.seep[0])*1.0035 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
+
+                # instruction step (3) fill in amount in dollars in place of float(20)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
+                self.buy(self.ticker, shares_to_buy)
+                print("bought:", self.quote)
+                tempval = average_cost*num_shares
+                average_cost = tempval
+                average_cost += float(self.quote)
+                num_shares += self.update_shares_buy
+                average_cost /= float(num_shares)
+                print("avg cost:" + str(average_cost))
+                
+        elif self.counter_one == 2:
+            if float(self.seep[0])*1.003 > float(self.quote) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
+
+                # instruction step (3) fill in amount in dollars in place of float(20)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
+                self.buy(self.ticker, shares_to_buy)
+                print("bought:", self.quote)
+                tempval = average_cost*num_shares
+                average_cost = tempval
+                average_cost += float(self.quote)
+                num_shares += self.update_shares_buy
+                average_cost /= float(num_shares)
+                print("avg cost:" + str(average_cost))
+        elif self.counter_one >= 7:
+            if float(self.quote)*1.004 < float(self.seep[0]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
+
+                # instruction step (3) fill in amount in dollars in place of float(20)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
+                self.buy(self.ticker, shares_to_buy)
+                print("bought:", self.quote)
+                tempval = average_cost*num_shares
+                average_cost = tempval
+                average_cost += float(self.quote)
+                num_shares += self.update_shares_buy
+                average_cost /= float(num_shares)
+                print("avg cost:" + str(average_cost))
+                
+            elif float(self.quote)*1.005 < float(self.seep[1]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
+
+                # instruction step (3) fill in amount in dollars in place of float(20)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
+                self.buy(self.ticker, shares_to_buy)
+                print("bought:", self.quote)
+                tempval = average_cost*num_shares
+                average_cost = tempval
+                average_cost += float(self.quote)
+                num_shares += self.update_shares_buy
+                average_cost /= float(num_shares)
+                print("avg cost:" + str(average_cost))
+                
+            elif float(self.quote)*1.006 < float(self.seep[2]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
+
+                # instruction step (3) fill in amount in dollars in place of float(20)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
+                self.buy(self.ticker, shares_to_buy)
+                print("bought:", self.quote)
+                tempval = average_cost*num_shares
+                average_cost = tempval
+                average_cost += float(self.quote)
                 num_shares +=self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
                 
-            elif float(r)*1.007 < float(seep[3]) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
+            elif float(self.quote)*1.007 < float(self.seep[3]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
-                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
-                print("bought:", r)
+                print("bought:", self.quote)
                 tempval = average_cost*num_shares
                 average_cost = tempval
-                average_cost += float(r)
+                average_cost += float(self.quote)
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
                 
-            elif float(r)*1.008 < float(seep[4]) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
+            elif float(self.quote)*1.008 < float(self.seep[4]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
-                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
-                print("bought:", r)
+                print("bought:", self.quote)
                 tempval = average_cost*num_shares
                 average_cost = tempval
-                average_cost += float(r)
+                average_cost += float(self.quote)
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
                 
-            elif float(r)*1.01 < float(seep[5]) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
+            elif float(self.quote)*1.01 < float(self.seep[5]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
-                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
-                print("bought:", r)
+                print("bought:", self.quote)
                 tempval = average_cost*num_shares
                 average_cost = tempval
-                average_cost += float(r)
+                average_cost += float(self.quote)
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
 
-            elif float(r)*1.013 < float(seep[6]) and float(r) < float(average_cost-float(average_cost*float(self.ac_floor))):
+            elif float(self.quote)*1.013 < float(self.seep[6]) and float(self.quote) < float(average_cost-float(average_cost*float(self.ac_floor))):
 
                 # instruction step (3) fill in amount in dollars in place of float(20)
-                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(r)-1)
+                shares_to_buy = math.floor(float(self.shares_to_buy_dollar) / float(self.quote)-1)
                 self.buy(self.ticker, shares_to_buy)
-                print("bought:", r)
+                print("bought:", self.quote)
                 tempval = average_cost*num_shares
                 average_cost = tempval
-                average_cost += float(r)
+                average_cost += float(self.quote)
                 num_shares += self.update_shares_buy
                 average_cost /= float(num_shares)
                 print("avg cost:" + str(average_cost))
-                
-        #SELL
-        if counter_two < 7:
-
-            if counter_two == 7:
-                if float(seep[0])*1.01 < float(r) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+    def sell(self):
+        if self.counter_two < 7:
+            if self.counter_two == 7:
+                if float(self.seep[0])*1.01 < float(self.quote) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                     # instruction step (4) fill in amount in dollars in place of float(100)
-                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                     self.sell(self.ticker, shares_to_sell)
-                    print("sold:", r)
-                    print("avg cost:", average_cost)
+                    print("sold:", self.quote)
+                    print("avg cost:", self.average_cost)
                     num_shares -= self.update_shares_sell
 
-            elif counter_two == 6:
-                if float(seep[0])*1.0075 < float(r) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif self.counter_two == 6:
+                if float(self.seep[0])*1.0075 < float(self.quote) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                     # instruction step (4) fill in amount in dollars in place of float(100)
-                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                     self.sell(self.ticker, shares_to_sell)
-                    print("sold:", r)
-                    print("avg cost:", average_cost)
+                    print("sold:", self.quote)
+                    print("avg cost:", self.average_cost)
                     num_shares -= self.update_shares_sell
                     
-            elif counter_two == 5:
-                if float(seep[0])*1.0065 < float(r) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif self.counter_two == 5:
+                if float(self.seep[0])*1.0065 < float(self.quote) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                     # instruction step (4) fill in amount in dollars in place of float(100)
-                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                     self.sell(self.ticker, shares_to_sell)
-                    print("sold:", r)
-                    print("avg cost:", average_cost)
+                    print("sold:", self.quote)
+                    print("avg cost:", self.average_cost)
                     num_shares -= self.update_shares_sell
                     
-            elif counter_two == 4:
-                if float(seep[0])*1.0055 < float(r) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif self.counter_two == 4:
+                if float(self.seep[0])*1.0055 < float(self.quote) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                     # instruction step (4) fill in amount in dollars in place of float(100)
-                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                     self.sell(self.ticker, shares_to_sell)
-                    print("sold:", r)
-                    print("avg cost:", average_cost)
+                    print("sold:", self.quote)
+                    print("avg cost:", self.average_cost)
                     num_shares -= 2.0
                     
-            elif counter_two == 3:
-                if float(seep[0])*1.0045 < float(r) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif self.counter_two == 3:
+                if float(self.seep[0])*1.0045 < float(self.quote) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                     # instruction step (4) fill in amount in dollars in place of float(100)
-                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                     self.sell(self.ticker, shares_to_sell)
-                    print("sold:", r)
-                    print("avg cost:", average_cost)
+                    print("sold:", self.quote)
+                    print("avg cost:", self.average_cost)
                     num_shares -= self.update_shares_sell
                     
-            elif counter_two == 2:
-                if float(seep[0])*1.0035 < float(r) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif self.counter_two == 2:
+                if float(self.seep[0])*1.0035 < float(self.quote) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                     # instruction step (4) fill in amount in dollars in place of float(100)
-                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                    shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                     self.sell(self.ticker, shares_to_sell)
-                    print("sold:", r)
-                    print("avg cost:", average_cost)
+                    print("sold:", self.quote)
+                    print("avg cost:", self.average_cost)
                     num_shares -= self.update_shares_sell
 
-        #SELL
-        if counter_two >= 7:
+        if self.counter_two >= 7:
 
-            if float(r)*0.997 > float(seep[0]) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            if float(self.quote)*0.997 > float(self.seep[0]) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                 # instruction step (4) fill in amount in dollars in place of float(100)
-                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                 self.sell(self.ticker, shares_to_sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
+                print("sold:", self.quote)
+                print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
             
-            elif float(r)*0.996 > float(seep[1]) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif float(self.quote)*0.996 > float(self.seep[1]) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                 # instruction step (4) fill in amount in dollars in place of float(100)
-                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                 self.sell(self.ticker, shares_to_sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
+                print("sold:", self.quote)
+                print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
                 
-            elif float(r)*0.995 > float(seep[2]) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif float(self.quote)*0.995 > float(self.seep[2]) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                 # instruction step (4) fill in amount in dollars in place of float(100)
-                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                 self.sell(self.ticker, shares_to_sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
+                print("sold:", self.quote)
+                print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
                 
-            elif float(r)*0.993 > float(seep[3]) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif float(self.quote)*0.993 > float(self.seep[3]) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                 # instruction step (4) fill in amount in dollars in place of float(100)
-                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                 self.sell(self.ticker, shares_to_sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
+                print("sold:", self.quote)
+                print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
                 
-            elif float(r)*0.992 > float(seep[4]) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif float(self.quote)*0.992 > float(self.seep[4]) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                 # instruction step (4) fill in amount in dollars in place of float(100)
-                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                 self.sell(self.ticker, shares_to_sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
+                print("sold:", self.quote)
+                print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
                 
-            elif float(r)*0.991 > float(seep[5]) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif float(self.quote)*0.991 > float(self.seep[5]) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                 # instruction step (4) fill in amount in dollars in place of float(100)
-                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                 self.sell(self.ticker, shares_to_sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
+                print("sold:", self.quote)
+                print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
                 
-            elif float(r)*0.988 > float(seep[6]) and float(r) > float(average_cost+float(average_cost*float(self.ac_ceiling))):
+            elif float(self.quote)*0.988 > float(self.seep[6]) and float(self.quote) > float(self.average_cost+float(self.average_cost*float(self.ac_ceiling))):
 
                 # instruction step (4) fill in amount in dollars in place of float(100)
-                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(r)+1)
+                shares_to_sell = math.floor(float(self.shares_to_sell_dollar) / float(self.quote)+1)
                 self.sell(self.ticker, shares_to_sell)
-                print("sold:", r)
-                print("avg cost:", average_cost)
+                print("sold:", self.quote)
+                print("avg cost:", self.average_cost)
                 num_shares -= self.update_shares_sell
-
-        # Keeps track of counter
-        print("c1:" + str(counter_one))
-        print("c2:" + str(counter_two))
-        counter_one += 1
-        counter_two += 1
-
-        return {
-            "average_cost": average_cost,
-            "num_shares": num_shares,
-            "shares_to_buy_dollar": self.shares_to_buy_dollar,
-            "shares_to_sell_dollar": self.shares_to_sell_dollar,
-            "counter_one": counter_one,
-            "counter_two": counter_two,
-            "seep": seep,
-        }
-        
-    # Functions to buy and sell crypto currency   
-    def buy(ticker, amountD):
-        r = robinhood.orders.order_buy_crypto_by_quantity(ticker, amountD)
-        print(r)
-
-    def sell(ticker, amountD):
-        r = robinhood.orders.order_sell_crypto_by_quantity(ticker, amountD)
-        print(r)

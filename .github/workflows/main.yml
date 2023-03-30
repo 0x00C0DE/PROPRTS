@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Delete python-local
+        run: rm -rf ./python-local/lib/python3.9/site-packages
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:

@@ -22,12 +22,15 @@ Latest files:
 - Run the script
 `python3 lambda_function.py`
 
-## Running on AWS Lambda
+## AWS Lamba Tools
 
-- Set up environment variables and secrets.
+- Don't forget to set up secrets & environment variables in Github.
 
 - Update python-aws. You MUST do this every time you add a package. You also need to do this inside an amazonlinux docker container.
 `pip install --target ./python-aws/lib/python3.9/site-packages -r requirements.txt --upgrade`
+
+- Start awslinux docker instance
+`docker run -v directory_to_lambda_code:/lambda -it --rm ubuntu`
 
 ## Tools
 

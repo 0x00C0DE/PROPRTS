@@ -1,6 +1,5 @@
 import sys
 import time
-from sched import scheduler
 
 class Scheduler:
     should_run: bool = False

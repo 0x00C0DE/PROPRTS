@@ -1,4 +1,3 @@
-import json
 import sys
 from os import environ
 
@@ -13,10 +12,10 @@ if is_local():
 else:
     sys.path.insert(0, './python-aws/lib/python3.9/site-packages')
 
-from json import dumps
-from dotenv import load_dotenv
-from proprts.main_proto_v1 import run
-from scheduler import Scheduler
+from json import dumps  # noqa: E402
+from dotenv import load_dotenv  # noqa: E402
+from proprts.main_proto_v1 import runBot  # noqa: E402
+from scheduler import Scheduler  # noqa: E402
 
 def lambda_handler(event, context):
     print('Lambda handler')
@@ -24,9 +23,9 @@ def lambda_handler(event, context):
     scheduler = Scheduler()
 
     if scheduler.should_run:
-        scheduler.start(run)
+        scheduler.start(runBot)
     else:
-        return run()
+        return runBot()
 
 def run():
     body = None

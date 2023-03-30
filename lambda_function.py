@@ -11,7 +11,7 @@ def is_local():
 if is_local():
     sys.path.insert(0, "./python-local/lib/python3.9/site-packages")
 else:
-    sys.path.insert(0, "./python/lib/python3.9/site-packages")
+    sys.path.insert(0, "./python-aws/lib/python3.9/site-packages")
 
 from aws.mainFunction import run
 from dotenv import load_dotenv

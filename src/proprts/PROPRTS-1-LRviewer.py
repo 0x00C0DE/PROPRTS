@@ -1,10 +1,9 @@
 import cv2
-import sys
 import urllib.request
 
 # Download the image from GitHub
-url = "https://raw.githubusercontent.com/0x00C0DE/PROPRTS/Braden-001/src/proprts/PROPRTS-1-LR.png"
-#url = 'https://raw.githubusercontent.com/0x00C0DE/PROPRTS/main/src/proprts/PROPRTS-1-LR.png'
+url = \
+    "https://raw.githubusercontent.com/0x00C0DE/PROPRTS/Braden-001/src/proprts/PROPRTS-1-LR.png"
 urllib.request.urlretrieve(url, 'PROPRTS-1-LR.png')
 
 while True:
@@ -13,5 +12,5 @@ while True:
         cv2.imshow("Window", image1)
         cv2.waitKey(9000)
         cv2.destroyAllWindows()
-    except:
+    except:  # noqa: E722
         pass

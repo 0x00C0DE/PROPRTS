@@ -6,4 +6,11 @@ pytest-cov >= 4.0.0
 cryptography==37.0.4
 hypothesis
 numpy
+scipy
+opencv-python
+matplotlib
+botocore==1.20.95
+pyopenssl==22.0.0
+boto3
+pynamodb
 # dotenv == 0.0.1

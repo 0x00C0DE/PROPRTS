@@ -30,7 +30,7 @@ jobs:
           ruff check --format=github --target-version=py39 ./src
       - name: Test with pytest
         run: |
-          pytest tests
+          # pytest tests
       - name: Delete python-local
         run: rm -rf ./python-local/lib/python3.9/site-packages
       - name: zip

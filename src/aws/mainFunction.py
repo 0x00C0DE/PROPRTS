@@ -1,5 +1,5 @@
 from json import dumps
-from rh_crypto.bot_2022_v4 import run as runCrypto
+from rh_crypto.bot_2022_v4 import Bot
 
 def run():
     body = None
@@ -8,7 +8,7 @@ def run():
     try:
         print("Running")
 
-        body = runCrypto()
+        body = Bot().run()
         
         print("Run successful")
     except Exception as e:

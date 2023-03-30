@@ -4,6 +4,9 @@ from os import environ
 
 sys.path.insert(0, "./src")
 
+print(environ.get('AWS_LAMBDA_RUNTIME_API'))
+print(not environ.get('AWS_LAMBDA_RUNTIME_API'))
+
 def is_local():
     return not environ.get('AWS_LAMBDA_RUNTIME_API')
 

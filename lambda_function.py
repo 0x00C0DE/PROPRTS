@@ -15,7 +15,7 @@ else:
 
 from json import dumps
 from dotenv import load_dotenv
-from rh_crypto.bot_2022_v4 import Bot
+from proprts.main_proto_v1 import run
 from scheduler import Scheduler
 
 def lambda_handler(event, context):
@@ -35,7 +35,7 @@ def run():
     try:
         print('Running')
 
-        body = Bot().run()
+        body = run()
         
         print('Run successful')
     except Exception as e:

@@ -66,8 +66,8 @@ class Bot:
 
     def run(self):
         robinhood.authentication.login(
-            environ.get("RH_USERNAME"), 
-            environ.get("RH_PASSWORD"), 
+            environ['RH_USERNAME'], 
+            environ['RH_PASSWORD'], 
             TOTP("Sauce").now()
         )
 

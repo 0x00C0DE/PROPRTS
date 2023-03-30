@@ -13,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Delete python-local
-        run: rm -rf ./python-local/lib/python3.9/site-packages
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -33,6 +31,8 @@ jobs:
       - name: Test with pytest
         run: |
           pytest tests
+      - name: Delete python-local
+        run: rm -rf ./python-local/lib/python3.9/site-packages
       - name: zip
         uses: montudor/action-zip@v0.1.0
         with:

@@ -12,6 +12,8 @@ if is_local():
 else:
     sys.path.insert(0, './python-aws/lib/python3.9/site-packages')
 
+
+from proprts.main_proto_v2 import CryptoBot
 from json import dumps  # noqa: E402
 from dotenv import load_dotenv  # noqa: E402
 from proprts.main_proto_v1 import runBot  # noqa: E402
@@ -21,9 +23,9 @@ def lambda_handler(event, context):
     print('Lambda handler')
 
     scheduler = Scheduler()
-
+    cryptobot = CryptoBot()
     if scheduler.should_run:
-        scheduler.start(runBot)
+        scheduler.start(cryptobot.)
     else:
         return runBot()
 

@@ -25,7 +25,7 @@ def lambda_handler(event, context):
     scheduler = Scheduler()
     cryptobot = CryptoBot()
     if scheduler.should_run:
-        scheduler.start(cryptobot.)
+        scheduler.start(runBot)
     else:
         return runBot()
 

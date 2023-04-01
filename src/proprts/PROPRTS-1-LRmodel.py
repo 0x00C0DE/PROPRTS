@@ -1,43 +1,73 @@
 import matplotlib.pyplot as plt
 from scipy import stats
+import sys
+import os
 
-dataFile = 'PROPRTS-1-data.txt'
+class createLRmodel():
+    y = []
+    yy = []
+    x = []
+    xx = []
+    slope = 0
+    intercept = 0
+    def read_lr_data(self):
+        # Using readlines()
+        dataFile = sys.argv[1]
+        file1 = open(dataFile, 'r')
+        Lines = file1.readlines()
+        numLines = len(Lines)
+        #print("numlines: ", numLines)
+        # Strips the newline character
+        for line in Lines:
+            if line == "\n":
+                quit()
+            line = line.replace('(','').replace(')','')
+            line = line.replace(',', '')
+            line = line.split()
+            print("line[0]: ", line[0])
+            print("line[1]: ", line[1])
+            self.xx.append(line[0])
+            self.xx = [float(i) for i in self.xx]
+            self.yy.append(line[1])
+            self.yy = [float(i) for i in self.yy]
+        file1.close()
+        self.x.clear()
+        self.y.clear()
+        self.x = [float(i) for i in self.xx]
+        self.y = [float(i) for i in self.yy]
+        self.xx.clear()
+        self.yy.clear()
 
-# Using readlines()
-file1 = open(dataFile, 'r')
-Lines = file1.readlines()
+        self.slope, self.intercept, r, p, std_err = stats.linregress(self.x, self.y)
 
-y = []
-yy = []
-x = []
-xx = []
+        mymodel = list(map(self.myfunc, self.x))
 
-# Strips the newline character
-for line in Lines:
-    line = line.replace('(','').replace(')','')
-    line = line.replace(',', '')
-    line = line.split()
-    xx.append(line[0])
-    xx = [float(i) for i in xx]
-    yy.append(line[1])
-    yy = [float(i) for i in yy]
-file1.close()
-x.clear()
-y.clear()
-x = [float(i) for i in xx]
-y = [float(i) for i in yy]
-xx.clear()
-yy.clear()
+        plt.clf()
+        plt.scatter(self.x, self.y)
+        plt.plot(self.x, mymodel)
+        plt.title("PROPRTS-1-LinearRegression")
+        plt.savefig("PROPRTS-1-LR.png")
 
-slope, intercept, r, p, std_err = stats.linregress(x, y)
+    def myfunc(self, x):
+      return self.slope * x + self.intercept
 
-def myfunc(x):
-  return slope * x + intercept
+    def is_txt_file(self, filename):
+        _, ext = os.path.splitext(filename)
+        return ext == '.txt'
 
-mymodel = list(map(myfunc, x))
+if len(sys.argv) == 1:
+    print("[ERROR]")
+    print("not enough args.lol: ", len(sys.argv))
+else:
+    #cwd = os.getcwd()
+    print("arg 3: ", sys.argv[1])
+    print("arg length: ", len(sys.argv))
+    test = createLRmodel()
+    if test.is_txt_file(sys.argv[1]) == True:
+        test.read_lr_data()
+    if len(sys.argv) > 2:
+        print("too many data files, only 1 allowed")
+    else:
+        print("There are no data files to load [ERROR]")
 
-plt.clf()
-plt.scatter(x, y)
-plt.plot(x, mymodel)
-plt.title("PROPRTS-1-LinearRegression")
-plt.savefig("PROPRTS-1-LR.png")
+

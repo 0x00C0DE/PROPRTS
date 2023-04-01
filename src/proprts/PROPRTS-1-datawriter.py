@@ -1,8 +1,6 @@
 import robin_stocks
 import pyotp
-import time
 import datetime
-from datetime import datetime, timedelta
 
 totp = pyotp.TOTP("Sauce").now()
 login = robin_stocks.login("email_here@test.com", "password_here")
@@ -26,7 +24,7 @@ x.append(ts)
 y.append(cryptoPrice)
 
 filename = "PROPRTS-1-data.txt"
-    
+
 # Read all lines from the file
 with open(filename, 'r') as f:
     lines = f.readlines()
@@ -45,10 +43,8 @@ with open(filename, 'w') as f:
 # Append new data to file if it doesn't already have 96 entries
 if len(lines) < 97:
     with open(filename, 'a') as f:
-        coordinate = list(zip(x,y))
+        coordinate = list(zip(x, y))
         final_coord = ''.join(str(z) for z in coordinate)
         f.write(final_coord)
         f.write("\n")
         #print("append lines: ", final_coord)
-
-

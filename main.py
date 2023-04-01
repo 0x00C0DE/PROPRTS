@@ -14,29 +14,18 @@ if is_local():
 else:
     sys.path.insert(0, './python-aws/lib/python3.9/site-packages')
 
-
-from proprts.main_proto_v2 import CryptoBot
 from json import dumps  # noqa: E402
 from dotenv import load_dotenv  # noqa: E402
 from scheduler import Scheduler  # noqa: E402
 from proprts.dynamoTest import DynamoTest  # noqa: E402
 
 
-def lambda_handler(event, context):
+def main(context):
+    print(context)
     print('Lambda handler')
 
     scheduler = Scheduler()
-<<<<<<< HEAD
-    cryptobot = CryptoBot()
-    if scheduler.should_run:
-        scheduler.start(runBot)
-    else:
-        return runBot()
 
-def run():
-=======
-
->>>>>>> 3ca8dac5d37c07529f9631c4af98aff8c82f9e5b
     body = None
     status = 200
 
@@ -58,13 +47,13 @@ def run():
 
     if is_local():
         print(body)
-    else:
-        return {
-            'statusCode': status,
-            'body': dumps(body)
-        }
+
+    return {
+        'statusCode': status,
+        'body': dumps(body)
+    }
 
 
 if is_local():
     load_dotenv()
-    lambda_handler(None, None)
+    main()

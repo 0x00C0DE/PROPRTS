@@ -20,12 +20,12 @@ class createLRmodel():
         # Strips the newline character
         for line in Lines:
             if line == "\n":
-                quit()
+                break
             line = line.replace('(','').replace(')','')
             line = line.replace(',', '')
             line = line.split()
-            print("line[0]: ", line[0])
-            print("line[1]: ", line[1])
+            #print("line[0]: ", line[0])
+            #print("line[1]: ", line[1])
             self.xx.append(line[0])
             self.xx = [float(i) for i in self.xx]
             self.yy.append(line[1])
@@ -59,13 +59,12 @@ if len(sys.argv) == 1:
     print("[ERROR]")
     print("not enough args.lol: ", len(sys.argv))
 else:
-    #cwd = os.getcwd()
-    print("arg 3: ", sys.argv[1])
-    print("arg length: ", len(sys.argv))
+    #print("arg 3: ", sys.argv[1])
+    #print("arg length: ", len(sys.argv))
     test = createLRmodel()
     if test.is_txt_file(sys.argv[1]) == True:
         test.read_lr_data()
-    if len(sys.argv) > 2:
+    elif len(sys.argv) > 2:
         print("too many data files, only 1 allowed")
     else:
         print("There are no data files to load [ERROR]")

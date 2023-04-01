@@ -20,7 +20,8 @@ from scheduler import Scheduler  # noqa: E402
 from proprts.dynamoTest import DynamoTest  # noqa: E402
 
 
-def main():
+def main(context):
+    print(context)
     print('Lambda handler')
 
     scheduler = Scheduler()
